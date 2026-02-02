@@ -20,43 +20,92 @@ STEP-5: Read the characters row wise or column wise in the former order to get t
 
 # PROGRAM
 ```
-#include <stdio.h>
- #include <string.h>
- #include <ctype.h>
- void encryptRailFence(char *message, int rails) {
- int len = strlen(message);
- char rail[rails][len];
- memset(rail, '\n', sizeof(rail));
- int row = 0, direction = 1;
- for (int i = 0; i < len; i++) {
- rail[row][i] = message[i];
- row += direction;
- if (row == rails- 1 | row == 0)
- direction =-direction;
- }
- printf("Encrypted text: ");
- for (int i = 0; i < rails; i++)
- for (int j = 0; j < len; j++)
- if (rail[i][j] != '\n')
- printf("%c", rail[i][j]);
- printf("\n");
- }
- int main() {
- char message[100];
- int rails;
- printf("Enter a Secret Message: ");
- scanf("%s", message);
- printf("Enter number of rails: ");
- scanf("%d", &rails);
- encryptRailFence(message, rails);
- return 0;
- }
+#include <stdio.h> 
+#include <string.h> 
+ 
+void railFenceEncrypt(char *message, int rails, char *cipherText) { 
+    int len = strlen(message); 
+    int row = 0, dir = 1;   
+    char rail[rails][len]; 
+    memset(rail, '\n', sizeof(rail)); 
+ 
+    for (int i = 0; i < len; i++) { 
+        rail[row][i] = message[i]; 
+        if (row == 0) dir = 1; 
+        else if (row == rails - 1) dir = -1; 
+        row += dir; 
+    } 
+ 
+    int k = 0; 
+    for (int i = 0; i < rails; i++) { 
+        for (int j = 0; j < len; j++) { 
+            if (rail[i][j] != '\n') { 
+                cipherText[k++] = rail[i][j]; 
+            } 
+        } 
+    } 
+    cipherText[k] = '\0'; 
+} 
+ 
+void railFenceDecrypt(char *cipherText, int rails, char *plainText) { 
+    int len = strlen(cipherText); 
+    char rail[rails][len]; 
+    memset(rail, '\n', sizeof(rail)); 
+ 
+    int row = 0, dir = 1; 
+    for (int i = 0; i < len; i++) { 
+        rail[row][i] = '*'; 
+        if (row == 0) dir = 1; 
+        else if (row == rails - 1) dir = -1; 
+        row += dir; 
+    } 
+ 
+    int k = 0; 
+    for (int i = 0; i < rails; i++) { 
+        for (int j = 0; j < len; j++) { 
+            if (rail[i][j] == '*' && k < len) { 
+                rail[i][j] = cipherText[k++]; 
+            } 
+        } 
+    } 
+ 
+    row = 0, dir = 1; 
+    for (int i = 0; i < len; i++) { 
+        plainText[i] = rail[row][i]; 
+        if (row == 0) dir = 1; 
+        else if (row == rails - 1) dir = -1; 
+        row += dir; 
+    } 
+    plainText[len] = '\0'; 
+} 
+ 
+int main() { 
+    char message[100], cipherText[100], decryptedText[100]; 
+    int rails; 
+ 
+    printf ("Enter the plain text: "); 
+    fgets(message, sizeof(message), stdin); 
+    message[strcspn(message, "\n")] = '\0'; 
+ 
+    printf ("Enter number of rails: "); 
+    scanf("%d", &rails); 
+ 
+    railFenceEncrypt(message, rails, cipherText); 
+    printf("\nEncrypted Text: %s\n", cipherText); 
+ 
+    railFenceDecrypt(cipherText, rails, decryptedText); 
+    printf ("Decrypted Text: %s\n", decryptedText); 
+ 
+    return 0; 
+}
 ```
+
 
 
 # OUTPUT
 
-<img width="529" height="458" alt="image" src="https://github.com/user-attachments/assets/a97e31d0-23af-4861-8a8d-be54d99bd7d6" />
+<img width="516" height="547" alt="image" src="https://github.com/user-attachments/assets/fe01a1c5-fd73-4dde-847d-e48e6041a2af" />
+
 # RESULT
 The program is executed successfully
 
