@@ -110,4 +110,3 @@ int main() {
 The program is executed successfully
 
 
-# RESULT
